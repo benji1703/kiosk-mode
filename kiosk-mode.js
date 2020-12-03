@@ -6,11 +6,9 @@ let llAttempts = 0;
 
 function getConfig() {
   const ll = main.querySelector("ha-panel-lovelace");
-  if (ll && (!ll.lovelace || !ll.lovelace.config) && llAttempts < 10) {
-    llAttempts++
-    setTimeout(() => getConfig(), 50)
-  }
-  return ll && ll.lovelace.config.kiosk_mode ? ll.lovelace.config.kiosk_mode : {};
+  if (typeof ll.lovelace !== "undefined") {
+    return ll && ll.lovelace.config.kiosk_mode ? ll.lovelace.config.kiosk_mode : {};
+  } 
 }
 
 // Return true if any keyword is found in location.
@@ -59,7 +57,7 @@ function kiosk_mode() {
   let hide_header = cacheAsBool("kmHeader") || locIncludes(["kiosk", "hide_header"]);
   let hide_sidebar = cacheAsBool("kmSidebar") || locIncludes(["kiosk", "hide_sidebar"]);
 
-  const config = getConfig();
+  const config = setTimeout(getConfig, 50);
   llAttempts = 0;
   const adminConf = config.admin_settings;
   const nonAdminConf = config.non_admin_settings;
